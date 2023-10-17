@@ -13,7 +13,7 @@ const fetchPage = (url, file) => {
       if (error) {
         console.error('Error fetching the page:', error);
       } else if (response.statusCode === 200) {
-        console.log(body, file);
+        handleSuccess(body, file);
       } else {
         console.error('Unexpected status code:', response.statusCode);
       }
@@ -21,6 +21,24 @@ const fetchPage = (url, file) => {
   } catch (err) {
     console.error('An unexpected error occurred:', err.message);
   }
+};
+
+const handleSuccess = (body, file) => {
+  fs.access(file, fs.constants.F_OK, (err) => {
+    if (!err) {
+      console.log('File already exists. Do you want to overwrite it? (Y/N)');
+      rl.question('', (answer) => {
+        if (answer.trim().toLowerCase() === 'y') {
+          writeFile(body, file);
+        } else {
+          console.log('File not overwritten. Exiting...');
+          rl.close();
+        }
+      });
+    } else {
+      writeFile(body, file);
+    }
+  });
 };
 
 const writeFile = (body, file) => {
@@ -41,7 +59,6 @@ if (args.length !== 2) {
   rl.close();
 } else {
   fetchPage(args[0], args[1]);
-  rl.close();
 }
 
 rl.on('close', () => process.exit(0));

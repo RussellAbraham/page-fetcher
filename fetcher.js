@@ -2,11 +2,22 @@ const request = require('request');
 const fs = require('fs');
 const readline = require('readline');
 
+/**
+ * Creates a readline interface for user input.
+ * @type {readline.Interface}
+ */
+
 // Create a readline interface for user input
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
+
+/**
+ * Fetches a page from the given URL and handles responses.
+ * @param {string} url - The URL to fetch the page from.
+ * @param {string} file - The local file path to save the fetched content.
+ */
 
 // Function to fetch a page from the given URL and handle responses
 const fetchPage = (url, file) => {
@@ -29,6 +40,12 @@ const fetchPage = (url, file) => {
     console.error('An unexpected error occurred:', err.message);
   }
 };
+
+/**
+ * Handles success after fetching the page.
+ * @param {string} body - The content of the fetched page.
+ * @param {string} file - The local file path to save the fetched content.
+ */
 
 // Function to handle success (200 response) after fetching the page
 const handleSuccess = (body, file) => {
@@ -54,6 +71,12 @@ const handleSuccess = (body, file) => {
     }
   });
 };
+
+/**
+ * Writes the fetched page content to a file.
+ * @param {string} body - The content of the fetched page.
+ * @param {string} file - The local file path to save the fetched content.
+ */
 
 // Function to write the fetched page content to a file
 const writeFile = (body, file) => {
